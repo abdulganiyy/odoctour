@@ -10,9 +10,10 @@ import { S3Service } from './s3/s3.service';
 import { DocumentModule } from './document/document.module';
 import { ConfigService } from '@nestjs/config';
 import { UuidService } from './uuid/uuid.service';
+import { EmailModule } from './email/email.module';
 
 @Module({
-  imports: [UserModule, AuthModule, RoleModule, MeetingModule, BookingModule, DocumentModule],
+  imports: [UserModule, AuthModule, RoleModule, MeetingModule, BookingModule, DocumentModule, EmailModule],
   controllers: [AppController],
   providers: [AppService, S3Service,ConfigService, UuidService],
 })

@@ -4,10 +4,12 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import {compare, hash} from 'bcrypt'
 import { RoleService } from 'src/role/role.service';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UserService, private roleService:RoleService,   private jwtService: JwtService
+  constructor(private usersService: UserService, private roleService:RoleService,   private jwtService: JwtService,
+   private emailService:EmailService
   ) {}
 
   async signIn(email: string, password: string): Promise<any> {
@@ -48,6 +50,14 @@ async signUp(email: string,firstname: string,lastname: string, pass: string): Pr
 
  
     const payload = { userId: newUser.userId, username: newUser.username, firstname: newUser.firstname,role:userRole.name };
+
+    await this.emailService.sendEmail(newUser.email,
+      'Welcome to Our App!',
+      'signup',
+      {
+        name: newUser.name,
+        link: 'https://odoctour-frontend.vercel.app/dashboard',
+      })
 
     return {
       access_token: await this.jwtService.signAsync(payload),

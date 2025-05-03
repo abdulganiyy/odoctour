@@ -5,6 +5,7 @@ import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { RoleModule } from 'src/role/role.module';
+import { EmailModule } from 'src/email/email.module';
 
 
 @Module({
@@ -12,8 +13,9 @@ import { RoleModule } from 'src/role/role.module';
     global: true,
     secret: jwtConstants.secret,
     signOptions: { expiresIn: '1hr' },
-  }),],
+  }),EmailModule],
   controllers: [AuthController],
   providers: [AuthService]
 })
+
 export class AuthModule {}

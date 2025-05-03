@@ -47,6 +47,12 @@ importers:
       bcrypt:
         specifier: ^5.1.1
         version: 5.1.1
+      nodemailer:
+        specifier: ^6.10.1
+        version: 6.10.1
+      nodemailer-express-handlebars:
+        specifier: ^7.0.0
+        version: 7.0.0(express-handlebars@8.0.3)(nodemailer@6.10.1)
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -3845,6 +3851,10 @@ packages:
     resolution: {integrity: sha512-2Zks0hf1VLFYI1kbh0I5jP3KHHyCHpkfyHBzsSXRFgl/Bg9mWYfMW8oD+PdMPlEwy5HNsR9JutYy6pMeOh61nw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
 
+  express-handlebars@8.0.3:
+    resolution: {integrity: sha512-uzvrS2HRlhFNmq2dZb6EJahu2tg7trV9wuYOJrkIbstemozwOvNRa0idkHBjy62nPu6wao76AlhJ69YBIHfkEA==}
+    engines: {node: '>=22.15.0'}
+
   express@5.0.1:
     resolution: {integrity: sha512-ORF7g6qGnD+YtUG9yx4DFoqCShNMmUKiXuT5oWMHiOvt/4WFbHC6yCwQMTSBMno7AqntNCAzzcnnjowRkTL9eQ==}
     engines: {node: '>= 18'}
@@ -4108,6 +4118,11 @@ packages:
 
   glob@11.0.1:
     resolution: {integrity: sha512-zrQDm8XPnYEKawJScsnM0QzobJxlT/kHOOlRTio8IH/GrmxRE5fjllkzdaHclIuNjUQTJYH2xHNIGfdpJkDJUw==}
+    engines: {node: 20 || >=22}
+    hasBin: true
+
+  glob@11.0.2:
+    resolution: {integrity: sha512-YT7U7Vye+t5fZ/QMkBFrTJ7ZQxInIUjwyAjVj84CYXqgBdv30MFUPGnBR6sQaVq6Is15wYJUsnzTuWaGRBhBAQ==}
     engines: {node: 20 || >=22}
     hasBin: true
 
@@ -5107,6 +5122,17 @@ packages:
 
   node-releases@2.0.19:
     resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==}
+
+  nodemailer-express-handlebars@7.0.0:
+    resolution: {integrity: sha512-fJ5pj5TaDiXKDShzrOksZDR1iE65W8z40unwM8+wiHT3AhifQsc2/G5uw4DC1LNN4RhqXGkuYuoEkoE+Zk+GHQ==}
+    engines: {node: '>= 20'}
+    peerDependencies:
+      express-handlebars: '>= 8.0.0'
+      nodemailer: '>= 6.0.0'
+
+  nodemailer@6.10.1:
+    resolution: {integrity: sha512-Z+iLaBGVaSjbIzQ4pX6XV41HrooLsQ10ZWPUehGmuantvzWoDVBnmsdUcOIDM1t+yPor5pDhVlDESgOMEGxhHA==}
+    engines: {node: '>=6.0.0'}
 
   nopt@5.0.0:
     resolution: {integrity: sha512-Tbj67rffqceeLpcRXrT7vKAN8CwfPeIBgM7E6iBkmKLV7bEMwpGgYLGv0jACUsECaa/vuxP0IjEont6umdMgtQ==}
@@ -10703,6 +10729,12 @@ snapshots:
       jest-message-util: 29.7.0
       jest-util: 29.7.0
 
+  express-handlebars@8.0.3:
+    dependencies:
+      glob: 11.0.2
+      graceful-fs: 4.2.11
+      handlebars: 4.7.8
+
   express@5.0.1:
     dependencies:
       accepts: 2.0.0
@@ -11042,6 +11074,15 @@ snapshots:
       path-scurry: 1.11.1
 
   glob@11.0.1:
+    dependencies:
+      foreground-child: 3.3.0
+      jackspeak: 4.0.3
+      minimatch: 10.0.1
+      minipass: 7.1.2
+      package-json-from-dist: 1.0.1
+      path-scurry: 2.0.0
+
+  glob@11.0.2:
     dependencies:
       foreground-child: 3.3.0
       jackspeak: 4.0.3
@@ -12263,6 +12304,13 @@ snapshots:
       resolve: 1.22.10
 
   node-releases@2.0.19: {}
+
+  nodemailer-express-handlebars@7.0.0(express-handlebars@8.0.3)(nodemailer@6.10.1):
+    dependencies:
+      express-handlebars: 8.0.3
+      nodemailer: 6.10.1
+
+  nodemailer@6.10.1: {}
 
   nopt@5.0.0:
     dependencies:
