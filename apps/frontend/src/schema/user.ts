@@ -1,0 +1,24 @@
+import * as yup from 'yup';
+import { REQUIRED,INVALID_EMAIL } from './common-validation';
+
+
+
+export const createNewUserFormSchema = yup.object().shape({
+  email: yup.string().email().required(INVALID_EMAIL),
+  firstname: yup.string().required(),
+  lastname: yup.string().required(),
+  password: yup.string().required('Password is required'),
+  confirmPassword: yup
+    .string()
+    .required('Confirm password is required')
+    .oneOf([yup.ref('password')], 'Passwords must match'),
+    role:yup.string().required(REQUIRED)
+});
+
+
+export const createNewMeetingFormSchema = yup.object().shape({
+    name: yup.string().required(),
+    duration: yup.string().required(),
+    type: yup.string().required(),
+    url: yup.string().required(),
+  });
