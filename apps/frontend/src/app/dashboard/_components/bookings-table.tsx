@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import apiService from "@/lib/apiService";
 import {
   Table,
   TableBody,
@@ -10,37 +11,40 @@ import {
 } from "@/components/ui/table";
 import TablePaginationFooter from "./table-pagination-footer";
 
-const list = [
-  {
-    id: "1",
-    name: "Consulting Meeting",
-    type: "Virtual",
-    url: "https://meet.google.com/jnk-onny-ggs",
-    duration: "30mins",
-  },
-];
-
 const BookingsTable = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [data, setData] = useState<any[]>(list);
+  const [data, setData] = useState<any[]>([]);
   const router = useRouter();
   const pathname = usePathname();
-  const meetingsList = data;
+  const bookingsList = data;
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = meetingsList
-    ? meetingsList.slice(indexOfFirstItem, indexOfLastItem)
+  const currentItems = bookingsList
+    ? bookingsList.slice(indexOfFirstItem, indexOfLastItem)
     : [];
-  const totalPages = meetingsList
-    ? Math.ceil(meetingsList.length / itemsPerPage)
+  const totalPages = bookingsList
+    ? Math.ceil(bookingsList.length / itemsPerPage)
     : 0;
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const response = await apiService.get(`/booking`);
+        setData(response);
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    };
+
+    fetchBookings();
+  }, []);
 
   return (
     <>
@@ -60,23 +64,23 @@ const BookingsTable = () => {
                       <TableHead className="md:col-span-3">Name</TableHead>
                       <TableHead className="md:col-span-3">Type</TableHead>
                       <TableHead className="md:col-span-2">Link</TableHead>
-                      <TableHead className="md:col-span-1 text-center">
-                        Duration
+                      <TableHead className="md:col-span-2">
+                        Description
                       </TableHead>
+                      <TableHead className="md:col-span-1">Duration</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {currentItems.map((meeting) => {
+                    {currentItems.map((booking) => {
                       return (
-                        <TableRow key={meeting.id}>
+                        <TableRow key={booking.id}>
                           <TableCell className="font-medium">
-                            {meeting.name}
+                            {booking.name}
                           </TableCell>
-                          <TableCell>{meeting.type}</TableCell>
-                          <TableCell>{meeting.url}</TableCell>
-                          <TableCell className="text-center">
-                            {meeting.duration}
-                          </TableCell>
+                          <TableCell>{booking.meeting.type}</TableCell>
+                          <TableCell>{booking.meeting.url}</TableCell>
+                          <TableCell>{booking.description}</TableCell>
+                          <TableCell>{booking.meeting.duration}mins</TableCell>
                         </TableRow>
                       );
                     })}

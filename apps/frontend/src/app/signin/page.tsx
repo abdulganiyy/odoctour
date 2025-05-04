@@ -79,7 +79,7 @@ export default function Home() {
             console.log(triedConsultation);
 
             if (triedConsultation && role == "User") {
-              router.push("/meetings/d773988f-bf4a-4a18-a9a0-7841cdac89b6");
+              router.push("/meetings/93e3430a-5aaa-4d5e-92e0-402acbe22d94");
             } else {
               router.push(`/dashboard`);
             }

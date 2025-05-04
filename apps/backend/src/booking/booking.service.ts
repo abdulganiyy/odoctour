@@ -12,8 +12,40 @@ export class BookingService {
     return this.prismaService.booking.create({data:createBookingDto})
   }
 
-  findAll() {
-    return this.prismaService.booking.findMany()
+  findAll(user:any) {
+    let role = user.role
+    if(role == 'User'){
+      return this.prismaService.booking.findMany({
+        include:{
+          meeting:true
+        },
+        where:{
+          user:{
+            id:user.id
+          },
+        }
+      })
+
+    }else if(role == 'Doctor'){
+
+      return this.prismaService.booking.findMany({
+        include:{
+          meeting:true
+        },
+        where:{
+          meeting:{
+            user:{
+              id:user.userId
+            }
+          }
+        }
+      })
+
+
+    }
+    return this.prismaService.booking.findMany({   include:{
+      meeting:true
+    },})
   }
 
   findOne(id: string) {

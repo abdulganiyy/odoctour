@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronRight } from "lucide-react";
+import apiService from "@/lib/apiService";
 import {
   Table,
   TableBody,
@@ -11,20 +11,10 @@ import {
 } from "@/components/ui/table";
 import TablePaginationFooter from "./table-pagination-footer";
 
-const list = [
-  {
-    id: "1",
-    name: "Consulting Meeting",
-    type: "Virtual",
-    url: "https://meet.google.com/jnk-onny-ggs",
-    duration: "30mins",
-  },
-];
-
 const MeetingsTable = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [data, setData] = useState<any[]>(list);
+  const [data, setData] = useState<any[]>([]);
   const router = useRouter();
   const pathname = usePathname();
   const meetingsList = data;
@@ -42,6 +32,19 @@ const MeetingsTable = () => {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+
+  useEffect(() => {
+    const fetchMeetings = async () => {
+      try {
+        const response = await apiService.get(`/meeting`);
+        setData(response);
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    };
+
+    fetchMeetings();
+  }, []);
 
   return (
     <>
@@ -76,7 +79,7 @@ const MeetingsTable = () => {
                           <TableCell>{meeting.type}</TableCell>
                           <TableCell>{meeting.url}</TableCell>
                           <TableCell className="text-center">
-                            {meeting.duration}
+                            {meeting.duration}mins
                           </TableCell>
                         </TableRow>
                       );

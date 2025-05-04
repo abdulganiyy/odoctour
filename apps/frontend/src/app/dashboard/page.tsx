@@ -1,22 +1,45 @@
 "use client";
 import { useUser } from "@/hooks/useUser";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { CreateUserModal } from "./_components/create-user-modal";
 import UserListTable from "./_components/user-list-table";
 import CreateMeeting from "./_components/create-meeting-modal";
 import MeetingsTable from "./_components/meetings-table";
 import BookingsTable from "./_components/bookings-table";
+import apiService from "@/lib/apiService";
 
 const Dashboard = () => {
   const { user } = useUser();
-  console.log(user);
+  const [data, setData] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchDashboardSummary = async () => {
+      try {
+        const response = await apiService.get(`/dashboard`);
+        setData(response);
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    };
+
+    fetchDashboardSummary();
+  }, []);
   return (
     <div>
       <div className="mb-4">
         <h3 className="text-3xl">Hi, {user?.firstname} </h3>
       </div>
       <div className="md:grid grid-cols-3 gap-4">
-        {user?.role == "Administrator" && (
+        {data.map((res) => {
+          return (
+            <div className="border-[1px] border-gray-400 p-4 rounded-sm">
+              <h1 className="text-4xl">{res.data}</h1>
+              <p>{res.name}</p>
+            </div>
+          );
+        })}
+
+        {/* {user?.role == "Administrator" && (
           <div className="border-[1px] border-gray-400 p-4 rounded-sm">
             <h1 className="text-4xl">10</h1>
             <p>Users</p>
@@ -33,7 +56,7 @@ const Dashboard = () => {
             <h1 className="text-4xl">30</h1>
             <p>Bookings</p>
           </div>
-        )}
+        )} */}
       </div>
       <div className="flex items-center gap-2 mt-4">
         {user?.role == "Administrator" && <CreateUserModal />}

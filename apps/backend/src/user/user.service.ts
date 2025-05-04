@@ -14,7 +14,11 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(): Promise<User[] | undefined> {
-    return this.prisma.user.findMany()
+    return this.prisma.user.findMany({
+      include:{
+        role:true
+      }
+    })
   }
 
   async findOne(email: string): Promise<User | undefined> {

@@ -8,5 +8,6 @@ import { BookingModule } from 'src/booking/booking.module';
   imports:[BookingModule],
   controllers: [MeetingController],
   providers: [MeetingService,PrismaService],
+  exports:[MeetingService]
 })
 export class MeetingModule {}

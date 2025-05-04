@@ -15,7 +15,23 @@ export class MeetingService {
     return this.prismaService.meeting.create({data:createMeetingDto})
   }
 
-  findAll() {
+  findAll(user:any) {
+
+    let role = user.role
+
+    if(role == 'Doctor'){
+
+      return this.prismaService.meeting.findMany({
+       
+        where:{
+            user:{
+              id:user.userId
+            }
+        }
+      })
+
+
+    }
     return this.prismaService.meeting.findMany()
   }
 

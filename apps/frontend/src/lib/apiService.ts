@@ -4,7 +4,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 // Function to read cookies from document.cookie
 const getToken = () => {
-  const cookies = document.cookie.split("; ");
+  const cookies = document.cookie.split("; ").slice(1);
   const tokenCookie = cookies.find((row) => row.startsWith("session="));
   return tokenCookie ? tokenCookie.split("=")[1] : "";
 };

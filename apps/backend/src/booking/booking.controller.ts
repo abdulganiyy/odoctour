@@ -15,8 +15,9 @@ export class BookingController {
   }
 
   @Get()
-  findAll() {
-    return this.bookingService.findAll();
+  @UseGuards(AuthGuard)
+  findAll(@Req() request:any) {
+    return this.bookingService.findAll(request.user);
   }
 
   @Get(':id')

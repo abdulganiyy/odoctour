@@ -15,8 +15,9 @@ export class MeetingController {
   }
 
   @Get()
-  findAll() {
-    return this.meetingService.findAll();
+  @UseGuards(AuthGuard)
+  findAll(@Req() req: any) {
+    return this.meetingService.findAll(req.user);
   }
 
   @Get(':id/bookings')
