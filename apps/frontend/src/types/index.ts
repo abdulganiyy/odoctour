@@ -19,7 +19,8 @@ export type FieldType =
   | 'files'
   | 'custom'
   | 'multi-select'
-  | 'row-group';
+  | 'row-group'  | 'picture-upload'
+  ;
 
 export type FormFieldValue = unknown;
 

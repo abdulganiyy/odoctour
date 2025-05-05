@@ -4,4 +4,5 @@ export class CreateDoctor{
     email:string
     password:string
     roleId:string
+    profilePictureId?:string
 }

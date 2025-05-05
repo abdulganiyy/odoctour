@@ -32,7 +32,10 @@ const Dashboard = () => {
       <div className="md:grid grid-cols-3 gap-4">
         {data.map((res) => {
           return (
-            <div className="border-[1px] border-gray-400 p-4 rounded-sm">
+            <div
+              key={res.name}
+              className="border-[1px] border-gray-400 p-4 rounded-sm"
+            >
               <h1 className="text-4xl">{res.data}</h1>
               <p>{res.name}</p>
             </div>

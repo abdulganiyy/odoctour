@@ -11,7 +11,7 @@ export class BookingController {
   @Post()
   @UseGuards(AuthGuard)
   create(@Body() createBookingDto: Omit<CreateBookingDto,'userId'>,@Req() request:any) {
-    return this.bookingService.create({...createBookingDto,userId:request.user.userId});
+    return this.bookingService.create({...createBookingDto,userId:request.user.userId})
   }
 
   @Get()

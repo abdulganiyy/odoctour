@@ -16,7 +16,8 @@ export class UserService {
   async findAll(): Promise<User[] | undefined> {
     return this.prisma.user.findMany({
       include:{
-        role:true
+        role:true,
+        profilePicture:true
       }
     })
   }

@@ -12,8 +12,14 @@ export const createNewUserFormSchema = yup.object().shape({
     .string()
     .required('Confirm password is required')
     .oneOf([yup.ref('password')], 'Passwords must match'),
-    role:yup.string().required(REQUIRED)
-});
+    role:yup.string().required(REQUIRED),
+    picture:yup.object().shape({
+      id:yup.string(),
+      url:yup.string(),
+      filename:yup.string(),
+    }),
+}
+);
 
 
 export const createNewMeetingFormSchema = yup.object().shape({

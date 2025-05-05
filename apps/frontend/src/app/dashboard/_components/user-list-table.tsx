@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import TablePaginationFooter from "./table-pagination-footer";
+import InitialsAvatar from "@/components/custom/initial-avatar";
 
 const UsersTable = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -59,6 +60,7 @@ const UsersTable = () => {
                 <Table className="w-full">
                   <TableHeader>
                     <TableRow>
+                      <TableCell>User Photo</TableCell>
                       <TableHead>First Name</TableHead>
                       <TableHead>Last Name</TableHead>
                       <TableHead>Email</TableHead>
@@ -69,6 +71,20 @@ const UsersTable = () => {
                     {currentItems.map((user) => {
                       return (
                         <TableRow key={user.id}>
+                          <TableCell>
+                            {user?.profilePicture?.url ? (
+                              <img
+                                className="rounded-full w-10 h-10"
+                                src={user?.profilePicture?.url}
+                                alt="profile image"
+                              />
+                            ) : (
+                              <InitialsAvatar
+                                firstName={user.firstname}
+                                lastName={user.lastname}
+                              />
+                            )}
+                          </TableCell>
                           <TableCell className="font-medium">
                             {user.firstname}
                           </TableCell>

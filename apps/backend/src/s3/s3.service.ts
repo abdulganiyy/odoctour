@@ -4,6 +4,7 @@ import {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
+
 } from '@aws-sdk/client-s3';
 
 // export const AWS_S3_CONFIG = {
@@ -40,8 +41,10 @@ export class S3Service {
       ContentType: contentType,
     });
 
-    const response = await this.s3.send(command);
-    console.log('response', response);
+     await this.s3.send(command);
+
+    return `https://${this.configService.get('AWS_S3_BUCKET_NAME')}.s3.${this.configService.get('AWS_REGION')}.amazonaws.com/${filename}`
+    // console.log('response', response);
   }
 
   async downloadFile(filename: string) {
@@ -50,7 +53,7 @@ export class S3Service {
       Key: filename,
     });
 
-    const response = await this.s3.send(command);
-    return response.Body;
+    return `https://${this.configService.get('AWS_S3_BUCKET_NAME')}.s3.${this.configService.get('AWS_REGION')}.amazonaws.com/${filename}`;
+
   }
 }

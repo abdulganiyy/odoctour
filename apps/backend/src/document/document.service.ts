@@ -16,10 +16,10 @@ export class DocumentService {
 
 
   async create(document: any) {
-    const { filecontents,uploadedById, ...rest } = document;
+    const { contents,uploadedById, ...rest } = document;
     const filename = `${this.uuidService.generateUuid()}-${rest.filename}`;
 
-    const url = await this.s3Service.uploadFile(filecontents, filename, rest.mimetype);
+    const url = await this.s3Service.uploadFile(contents, filename, rest.mimetype);
 
     return this.prisma.document.create({data:{filename,type:rest.mimetype,url,mimetype:rest.mimetype,uploadedBy:{connect:{id:uploadedById}}}} as any)
 
