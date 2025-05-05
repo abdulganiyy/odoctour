@@ -10,15 +10,20 @@ import apiService from "@/lib/apiService";
 
 const Dashboard = () => {
   const { user } = useUser();
+  const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
     const fetchDashboardSummary = async () => {
+      setLoading(true);
       try {
         const response = await apiService.get(`/dashboard`);
         setData(response);
       } catch (error: any) {
         console.log(error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -29,38 +34,27 @@ const Dashboard = () => {
       <div className="mb-4">
         <h3 className="text-3xl">Hi, {user?.firstname} </h3>
       </div>
-      <div className="md:grid grid-cols-3 gap-4">
-        {data.map((res) => {
-          return (
-            <div
-              key={res.name}
-              className="border-[1px] border-gray-400 p-4 rounded-sm"
-            >
-              <h1 className="text-4xl">{res.data}</h1>
-              <p>{res.name}</p>
-            </div>
-          );
-        })}
-
-        {/* {user?.role == "Administrator" && (
-          <div className="border-[1px] border-gray-400 p-4 rounded-sm">
-            <h1 className="text-4xl">10</h1>
-            <p>Users</p>
-          </div>
-        )}
-        {["Administrator", "Doctor"].includes(user?.role) && (
-          <div className="border-[1px] border-gray-400 p-4 rounded-sm">
-            <h1 className="text-4xl">20</h1>
-            <p>Meetings</p>
-          </div>
-        )}
-        {["Administrator", "Doctor", "User"].includes(user?.role) && (
-          <div className="border-[1px] border-gray-400 p-4 rounded-sm">
-            <h1 className="text-4xl">30</h1>
-            <p>Bookings</p>
-          </div>
-        )} */}
-      </div>
+      {loading ? (
+        <div className="md:grid grid-cols-3 gap-4 animate-pulse">
+          <div className="h-30 bg-gray-200 rounded-md dark:bg-gray-700"></div>
+          <div className="h-30 bg-gray-200 rounded-md dark:bg-gray-700"></div>
+          <div className="h-30 bg-gray-200 rounded-md dark:bg-gray-700"></div>
+        </div>
+      ) : (
+        <div className="md:grid grid-cols-3 gap-4">
+          {data.map((res) => {
+            return (
+              <div
+                key={res.name}
+                className="border-[1px] border-gray-400 p-4 rounded-sm"
+              >
+                <h1 className="text-4xl">{res.data}</h1>
+                <p>{res.name}</p>
+              </div>
+            );
+          })}
+        </div>
+      )}
       <div className="flex items-center gap-2 mt-4">
         {user?.role == "Administrator" && <CreateUserModal />}
         {user?.role == "Doctor" && <CreateMeeting />}

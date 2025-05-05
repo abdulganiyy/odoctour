@@ -12,10 +12,10 @@ import { EmailModule } from 'src/email/email.module';
   imports:[UserModule,RoleModule, JwtModule.register({
     global: true,
     secret: jwtConstants.secret,
-    signOptions: { expiresIn: '1hr' },
+    signOptions: { expiresIn: '1d' },
   }),EmailModule],
   controllers: [AuthController],
-  providers: [AuthService]
+  providers: [AuthService],
 })
 
 export class AuthModule {}

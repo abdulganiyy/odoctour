@@ -7,7 +7,7 @@ const Hero = () => {
   const { user } = useUser();
   const router = useRouter();
 
-  console.log(user);
+  // console.log(user);
 
   const goToMeeting = () => {
     if (typeof window !== undefined) {

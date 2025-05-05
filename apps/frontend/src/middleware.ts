@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isJwtExpired } from "./lib/session";
-import { jwtDecode } from "jwt-decode";
 
 
 const protectedRoutes = ["/dashboard"];
@@ -15,15 +14,9 @@ export default async function middleware(req: NextRequest) {
 
     // console.log(token)
 
-
     const isTokenExpired = isJwtExpired(token)
 
     // console.log(isTokenExpired)
-
-
-    // const session =  jwtDecode(token) as {userId:string}
-
-    // console.log(session)
   
     if (isProtectedRoute && isTokenExpired) {
       return NextResponse.redirect(new URL("/", req.nextUrl));

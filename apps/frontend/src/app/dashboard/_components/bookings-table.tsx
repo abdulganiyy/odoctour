@@ -78,7 +78,16 @@ const BookingsTable = () => {
                             {booking.name}
                           </TableCell>
                           <TableCell>{booking.meeting.type}</TableCell>
-                          <TableCell>{booking.meeting.url}</TableCell>
+                          <TableCell>
+                            <a
+                              className="cursor-pointer text-blue-600"
+                              href={booking.meeting.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {booking.meeting.url}
+                            </a>
+                          </TableCell>
                           <TableCell>{booking.description}</TableCell>
                           <TableCell>{booking.meeting.duration}mins</TableCell>
                         </TableRow>

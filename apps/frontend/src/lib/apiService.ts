@@ -1,5 +1,3 @@
-// lib/apiService.ts
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 // Function to read cookies from document.cookie
