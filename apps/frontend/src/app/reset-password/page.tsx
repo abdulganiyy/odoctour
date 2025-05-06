@@ -1,10 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FormFactory from "@/components/custom/form-factory";
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { resetPasswordFormSchema } from "@/schema/auth";
-import { ArrowRightIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import AuthWrapper from "@/components/custom/auth-wrapper";
 import { useToast } from "@/hooks/use-toast";
@@ -30,7 +29,7 @@ export const resetPasswordErrorMessages = {
   GENERIC_ERROR: "There was an error resetting your password.",
 } as const;
 
-export default function ForgotPassword() {
+export default function ResetPassword() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
