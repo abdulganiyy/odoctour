@@ -40,12 +40,14 @@ export class DashboardService {
 
     const users = await this.prismaService.user.findMany()
 
+    // console.log(appointments,meetings)
+
     if(role == 'User'){
 
       return [
         {
           name:'Appointments',
-          data: appointments.length
+          data: appointments.length ?? 0
         }
       ]
       
@@ -55,11 +57,11 @@ export class DashboardService {
       return [
         {
           name:'Meetings',
-          data: meetings.length
+          data: meetings.length ?? 0
         },
         {
           name:'Appointments',
-          data: appointments.length
+          data: appointments.length ?? 0
         }
       ]
 
@@ -68,15 +70,15 @@ export class DashboardService {
     return [
       {
         name:'Users',
-        data: users.length
+        data: users.length ?? 0
       },
       {
         name:'Meetings',
-        data: meetings.length
+        data: meetings.length ?? 0
       },
       {
         name:'Appointments',
-        data: appointments.length
+        data: appointments.length ?? 0
       }
     ]
   }

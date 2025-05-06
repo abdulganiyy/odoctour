@@ -8,6 +8,7 @@ import { ArrowRightIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { jwtDecode } from "jwt-decode";
 import AuthWrapper from "@/components/custom/auth-wrapper";
+import { useToast } from "@/hooks/use-toast";
 
 import type { FieldConfig, FormValues } from "@/types";
 
@@ -39,6 +40,8 @@ export default function Home() {
   const [loginError, setLoginError] = useState<string | null>(null);
   const { INVALID_CREDENTIALS, NO_MATCHING_ROLES, GENERIC_LOGIN_ERROR } =
     loginErrorMessages;
+
+  const { toast } = useToast();
 
   async function handleLogin(data: FormValues): Promise<void> {
     setLoginError(null);
@@ -72,11 +75,10 @@ export default function Home() {
         console.log(role);
 
         if (role) {
-          // Note: The redirect needs to be delayed slightly so that the cookie gets set first as part of the current rendering cycle.
           setTimeout(() => {
             let triedConsultation = localStorage.getItem("triedConsultation");
 
-            console.log(triedConsultation);
+            toast({ description: "Login Successful" });
 
             if (triedConsultation && role == "User") {
               router.push("/meetings/93e3430a-5aaa-4d5e-92e0-402acbe22d94");
@@ -97,6 +99,10 @@ export default function Home() {
     } catch (error) {
       setLoginError(GENERIC_LOGIN_ERROR);
       setIsSubmitting(false);
+      toast({
+        variant: "destructive",
+        description: GENERIC_LOGIN_ERROR,
+      });
     }
   }
 

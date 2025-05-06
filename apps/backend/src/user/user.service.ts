@@ -39,4 +39,12 @@ export class UserService {
 
   }
 
+  async updatePassword(data:User): Promise<User | undefined> {
+
+    return  this.prisma.user.update({
+      where: { email:data.email },
+      data: { password: data.password },
+    });
+  }
+
 }

@@ -6,6 +6,18 @@ export const loginFormSchema = yup.object().shape({
   password: yup.string().required(REQUIRED),
 });
 
+export const forgotPasswordFormSchema = yup.object().shape({
+  email: yup.string().email().required(INVALID_EMAIL),
+});
+
+export const resetPasswordFormSchema = yup.object().shape({
+  password: yup.string().required('Password is required'),
+  confirmPassword: yup
+    .string()
+    .required('Confirm password is required')
+    .oneOf([yup.ref('password')], 'Passwords must match'),
+});
+
 export const signUpFormSchema = yup.object().shape({
   email: yup.string().email().required(INVALID_EMAIL),
   firstname: yup.string().required(),

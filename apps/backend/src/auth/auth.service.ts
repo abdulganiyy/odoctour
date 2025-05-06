@@ -64,4 +64,54 @@ async signUp(email: string,firstname: string,lastname: string, pass: string): Pr
     };
 }
 
+async forgotPassword(email: string): Promise<any> {
+  const user = await this.usersService.findOne(email);
+
+  if (!user) {
+    throw new BadRequestException('User does notxs exist')
+  }
+
+  const token = await this.jwtService.signAsync({email}, {
+    secret: process.env.JWT_SIGNING_SECRET,
+    expiresIn:"1hr"
+  })
+
+
+   await this.emailService.sendEmail(email,
+    'Reset Your Password',
+    'reset-password',
+    {name:user.firstname,
+    resetLink: `${process.env.FRONTEND_URL}/reset-password?token=${token}`,
+    appName:'Odoctour'
+    });
+
+    return { message: 'Check your email for password reset link' }
+
+}
+
+
+async resetPassword(
+ token: string,
+newPassword: string,
+) {
+
+  try {
+    const payload = this.jwtService.verify(token, {
+      secret: process.env.JWT_SIGNING_SECRET,
+    });
+
+    const email = payload.email;
+
+    const password = await hash(newPassword,10);
+
+    
+    await this.usersService.updatePassword({email,password})
+    return { message: 'Password successfully reset' };
+
+  } catch (error) {
+    console.log(error)
+    throw new UnauthorizedException('Invalid or expired reset token');
+  }
+}
+
 }

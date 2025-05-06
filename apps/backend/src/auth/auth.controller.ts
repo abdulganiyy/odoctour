@@ -20,6 +20,18 @@ export class AuthController {
     return this.authService.signUp(signUpDto.email,signUpDto.firstname,signUpDto.lastname, signUpDto.password,);
   }
 
+  @HttpCode(HttpStatus.OK)
+  @Post('forgot-password')
+  forgotPassword(@Body('email') email: string ){
+    return this.authService.forgotPassword(email)
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('reset-password')
+  resetPassword(@Body('token') token: string,@Body('newPassword') newPassword:string ){
+    return this.authService.resetPassword(token,newPassword)
+  }
+
   @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@Request() req) {

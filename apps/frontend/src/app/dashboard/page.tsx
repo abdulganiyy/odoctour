@@ -19,6 +19,7 @@ const Dashboard = () => {
       setLoading(true);
       try {
         const response = await apiService.get(`/dashboard`);
+        console.log(response);
         setData(response);
       } catch (error: any) {
         console.log(error.message);

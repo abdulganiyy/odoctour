@@ -1,13 +1,14 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FormFactory from "@/components/custom/form-factory";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { loginFormSchema, signUpFormSchema } from "@/schema/auth";
+import { signUpFormSchema } from "@/schema/auth";
 import { ArrowRightIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { jwtDecode } from "jwt-decode";
 import AuthWrapper from "@/components/custom/auth-wrapper";
+import { useToast } from "@/hooks/use-toast";
 
 import type { FieldConfig, FormValues } from "@/types";
 
@@ -53,11 +54,12 @@ export const signUpErrorMessages = {
 
 export default function SignUp() {
   const router = useRouter();
-  // const { setRoles, setUserData, setAccessToken } = useUserInfo();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [signUpError, setSignUpError] = useState<string | null>(null);
   const { INVALID_CREDENTIALS, NO_MATCHING_ROLES, GENERIC_SINUP_ERROR } =
     signUpErrorMessages;
+
+  const { toast } = useToast();
 
   async function handleSignUp(data: FormValues): Promise<void> {
     setSignUpError(null);
@@ -87,34 +89,28 @@ export default function SignUp() {
         let role = decodedToken.role;
 
         if (role) {
-          // Note: The redirect needs to be delayed slightly so that the cookie gets set first as part of the current rendering cycle.
+          toast({ description: "You have successfully signed up" });
           setTimeout(() => {
             router.push(`/dashboard`);
           }, 500);
         } else {
           setSignUpError(NO_MATCHING_ROLES);
           setIsSubmitting(false);
+          toast({ variant: "destructive", description: NO_MATCHING_ROLES });
         }
       } else {
         const errorMessage =
           response.status === 401 ? INVALID_CREDENTIALS : GENERIC_SINUP_ERROR;
         setSignUpError(errorMessage);
         setIsSubmitting(false);
+        toast({ variant: "destructive", description: errorMessage });
       }
     } catch (error) {
       setSignUpError(GENERIC_SINUP_ERROR);
       setIsSubmitting(false);
+      toast({ variant: "destructive", description: GENERIC_SINUP_ERROR });
     }
   }
-
-  useEffect(() => {
-    // clear React context and browser session storage on page load
-    // setRoles([]);
-    // setUserData(null);
-    // setAccessToken(null);
-    // sessionStorage.clear();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <AuthWrapper>
