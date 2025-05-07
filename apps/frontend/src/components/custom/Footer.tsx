@@ -8,7 +8,7 @@ const Footer = () => {
           href="#"
           className="flex justify-center items-center text-2xl font-semibold text-gray-900 dark:text-white"
         >
-          <svg
+          {/* <svg
             className="mr-2 h-8"
             viewBox="0 0 33 33"
             fill="none"
@@ -151,8 +151,9 @@ const Footer = () => {
                 <stop offset="1" stopColor="#45B2FF" />
               </linearGradient>
             </defs>
-          </svg>
-          Oductur
+          </svg> */}
+          <img src="logo.png" className="h-30 sm:h-20" alt="Odoctor Logo" />
+          {/* Odoctor */}
         </a>
         <p className="my-6 text-gray-500 dark:text-gray-400">
           Oductur provides progressive, and affordable healthcare, accessible on
@@ -198,7 +199,7 @@ const Footer = () => {
         <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
           © 2025{" "}
           <a href="#" className="hover:underline">
-            Oductur™
+            Odoctor™
           </a>
           . All Rights Reserved.
         </span>

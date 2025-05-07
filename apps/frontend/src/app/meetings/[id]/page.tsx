@@ -13,12 +13,15 @@ import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 import { useUser } from "@/hooks/useUser";
 import { combineDateTime } from "@/lib/utils";
 import Spinner from "@/components/spinner";
+import { useToast } from "@/hooks/use-toast";
 
 function Page() {
   const router = useRouter();
   const { id } = useParams();
   const [date, setDate] = useState(new Date());
   const [isLoading, setIsLoading] = useState(false);
+
+  const { toast } = useToast();
 
   //  const [duration,setDuration] = useState(30)
   const [description, setDescription] = useState("I have body pains");
@@ -58,6 +61,7 @@ function Page() {
   };
 
   const handleBooking = async () => {
+    if (!selectedTime) return;
     const payload = {
       name: meeting.name,
       description,
@@ -66,11 +70,15 @@ function Page() {
       date: combineDateTime(date.toDateString(), selectedTime),
     };
 
+    console.log(payload);
+
     try {
       setIsLoading(true);
       const response = await apiService.post(`/booking`, payload);
+      toast({ description: "Your appointment has been booked successfully" });
     } catch (error: any) {
       console.log(error.message);
+      toast({ variant: "destructive", description: error.message });
     } finally {
       setIsLoading(false);
       closePaymentModal();
@@ -210,7 +218,10 @@ function Page() {
         <Button
           className="w-64 bg-slate-800 text-white"
           // disabled={!userEmail || !userName}
+          // onClick={handleBooking}
           onClick={() => {
+            setIsLoading(true);
+
             handleFlutterPayment({
               callback: (response) => {
                 handleBooking();

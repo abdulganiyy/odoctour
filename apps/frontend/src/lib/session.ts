@@ -18,8 +18,7 @@ export function isJwtExpired(token: string): boolean {
     if (!payload.exp) return false; // If no `exp` field, assume it's not expired
     const expiryTime = payload.exp  * 1000 // Convert to milliseconds
     return Date.now() >= expiryTime;
-  } catch (error) {
-    console.error("Invalid JWT token", error);
+  } catch (error:any) {
     return true; // Treat invalid tokens as expired
   }
 }

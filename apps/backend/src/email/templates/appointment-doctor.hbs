@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>New Appointment Booked</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f9f9f9;
+        padding: 20px;
+      }
+      .card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        max-width: 600px;
+        margin: auto;
+      }
+      .heading {
+        color: #333;
+        margin-bottom: 20px;
+      }
+      .label {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h2 class="heading">Hello Dr. {{doctorName}},</h2>
+      <p>You have a new appointment scheduled.</p>
+      <p>
+        <span class="label">Patient:</span> {{userName}}<br />
+        <span class="label">Date & Time:</span> {{appointmentTime}}<br />
+        <span class="label">Mode:</span> {{mode}}<br />
+        <span class="label">Contact:</span> {{userEmail}} / {{userPhone}}
+      </p>
+      <p>Please log in to your dashboard to review details or prepare for the consultation.</p>
+      <p>Thank you,<br />The {{appName}} Team</p>
+    </div>
+  </body>
+</html>

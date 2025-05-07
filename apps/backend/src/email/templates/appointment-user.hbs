@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Appointment Confirmation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        padding: 20px;
+      }
+      .card {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 8px;
+        max-width: 600px;
+        margin: auto;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
+      .highlight {
+        font-weight: bold;
+        color: #007bff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h2>Hi {{userName}},</h2>
+      <p>Your appointment with <span class="highlight">Dr. {{doctorName}}</span> has been confirmed.</p>
+      <p>
+        <span class="highlight">Date & Time:</span> {{appointmentTime}}<br />
+        <span class="highlight">Mode:</span> {{mode}}<br />
+        <span class="highlight">Location:</span> {{location}}
+      </p>
+      <p>Thank you for using {{appName}}. We wish you a great consultation!</p>
+      <p style="font-size: 12px; color: #999;">You will receive reminders before the appointment.</p>
+    </div>
+  </body>
+</html>

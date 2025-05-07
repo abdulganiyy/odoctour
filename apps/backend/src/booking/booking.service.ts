@@ -2,14 +2,57 @@ import { Injectable } from '@nestjs/common';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { PrismaService } from 'src/prisma.service';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class BookingService {
 
-  constructor(private prismaService:PrismaService){}
+  constructor(private prismaService:PrismaService,private emailService:EmailService){}
 
-  create(createBookingDto: CreateBookingDto) {
-    return this.prismaService.booking.create({data:createBookingDto})
+  async create(createBookingDto: CreateBookingDto) {
+
+   const newBooking = await this.prismaService.booking.create({data:createBookingDto})
+
+   const user = await this.prismaService.user.findUniqueOrThrow({
+    
+    where:{
+      id:createBookingDto.userId
+    }
+   })
+
+   const meeting = await this.prismaService.meeting.findUniqueOrThrow({
+    select:{
+      user:true,
+      type:true,
+      url:true,
+    },
+    where:{
+      id:createBookingDto.meetingId
+    }
+   })
+
+  await this.emailService.sendEmail(user.email,'Your Appointment is Confirmed','appointment-user',{
+      userName: user.firstname,
+      doctorName: meeting.user.firstname,
+      appointmentTime: newBooking.time,
+      mode: meeting.type,
+      location: meeting.url,
+      appName: 'Odoctor',
+  })
+
+  await this.emailService.sendEmail(meeting.user.email,`New Appointment Booked with ${user.firstname}`,'appointment-doctor',{
+    userName: user.firstname,
+    userEmail: user.email,
+    doctorName: meeting.user.firstname,
+    appointmentTime: newBooking.time,
+    mode: meeting.type,
+    location: meeting.url,
+    appName: 'Odoctor'
+})
+
+
+  return newBooking
+  
   }
 
   findAll(user:any) {
