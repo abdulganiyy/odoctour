@@ -10,6 +10,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import TablePaginationFooter from "./table-pagination-footer";
+import { addMinutes, format } from "date-fns";
+
+const generateSlot = (startTime: string, durationInMinutes: number) => {
+  const formattedDate = format(startTime, "MMMM d, yyyy"); // "January 2"
+  const start = new Date(startTime);
+  const end = addMinutes(start, durationInMinutes);
+  return `${formattedDate}, ${format(start, "h:mm a")} - ${format(end, "h:mm a")}`;
+};
 
 const BookingsTable = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -67,32 +75,42 @@ const BookingsTable = () => {
                       <TableHead className="md:col-span-2">
                         Description
                       </TableHead>
-                      <TableHead className="md:col-span-1">Duration</TableHead>
+                      <TableHead className="md:col-span-1">Date</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {currentItems.map((booking) => {
-                      return (
-                        <TableRow key={booking.id}>
-                          <TableCell className="font-medium">
-                            {booking.name}
-                          </TableCell>
-                          <TableCell>{booking.meeting.type}</TableCell>
-                          <TableCell>
-                            <a
-                              className="cursor-pointer text-blue-600"
-                              href={booking.meeting.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {booking.meeting.url}
-                            </a>
-                          </TableCell>
-                          <TableCell>{booking.description}</TableCell>
-                          <TableCell>{booking.meeting.duration}mins</TableCell>
-                        </TableRow>
-                      );
-                    })}
+                    {currentItems
+                      .sort(
+                        (a: any, b: any) =>
+                          +new Date(b.date) - +new Date(a.date)
+                      )
+                      .map((booking) => {
+                        return (
+                          <TableRow key={booking.id}>
+                            <TableCell className="font-medium">
+                              {booking.name}
+                            </TableCell>
+                            <TableCell>{booking.meeting.type}</TableCell>
+                            <TableCell>
+                              <a
+                                className="cursor-pointer text-blue-600"
+                                href={booking.meeting.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {booking.meeting.url}
+                              </a>
+                            </TableCell>
+                            <TableCell>{booking.description}</TableCell>
+                            <TableCell>
+                              {generateSlot(
+                                booking.time,
+                                booking.meeting.duration
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
                   </TableBody>
                 </Table>
               </div>

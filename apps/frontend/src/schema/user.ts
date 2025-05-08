@@ -5,6 +5,7 @@ import { REQUIRED,INVALID_EMAIL } from './common-validation';
 
 export const createNewUserFormSchema = yup.object().shape({
   email: yup.string().email().required(INVALID_EMAIL),
+  phone:yup.string().required(),
   firstname: yup.string().required(),
   lastname: yup.string().required(),
   password: yup.string().required('Password is required'),

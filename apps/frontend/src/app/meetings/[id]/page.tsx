@@ -4,7 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import Link from "next/link";
-import { Pin, CalendarCheck, Clock, MapPin, Timer } from "lucide-react";
+import {
+  Pin,
+  CalendarCheck,
+  Clock,
+  MapPin,
+  Timer,
+  ArrowLeftIcon,
+} from "lucide-react";
 import apiService from "@/lib/apiService";
 import { useRouter, useParams } from "next/navigation";
 import { capitalize } from "lodash";
@@ -14,6 +21,8 @@ import { useUser } from "@/hooks/useUser";
 import { combineDateTime } from "@/lib/utils";
 import Spinner from "@/components/spinner";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
+import { isBefore, startOfDay, isEqual } from "date-fns";
 
 function Page() {
   const router = useRouter();
@@ -61,6 +70,8 @@ function Page() {
   };
 
   const handleBooking = async () => {
+    // router.refresh()
+
     if (!selectedTime) return;
     const payload = {
       name: meeting.name,
@@ -70,14 +81,16 @@ function Page() {
       date: combineDateTime(date.toDateString(), selectedTime),
     };
 
-    console.log(payload);
-
     try {
       setIsLoading(true);
       const response = await apiService.post(`/booking`, payload);
       toast({ description: "Your appointment has been booked successfully" });
+      // router.refresh()
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch (error: any) {
-      console.log(error.message);
       toast({ variant: "destructive", description: error.message });
     } finally {
       setIsLoading(false);
@@ -87,11 +100,13 @@ function Page() {
 
   useEffect(() => {
     const fetchMeeting = async () => {
-      const response = await apiService.get(`/meeting/${id}`);
+      try {
+        const response = await apiService.get(`/meeting/${id}`);
 
-      console.log(response);
-
-      setMeeting(response);
+        setMeeting(response);
+      } catch (error: any) {
+        toast({ variant: "destructive", description: error.message });
+      }
     };
 
     fetchMeeting();
@@ -99,9 +114,15 @@ function Page() {
 
   useEffect(() => {
     const fetchBookings = async () => {
-      const response = await apiService.get(`/meeting/${id}/bookings`);
+      try {
+        const response = await apiService.get(`/meeting/${id}/bookings`);
 
-      setPrevBookings(response);
+        console.log(response);
+
+        setPrevBookings(response);
+      } catch (error: any) {
+        toast({ variant: "destructive", description: error.message });
+      }
     };
 
     fetchBookings();
@@ -112,9 +133,14 @@ function Page() {
    * @param {*} time
    * @returns Boolean
    */
-  const checkTimeSlot = (time: any) => {
+  const checkTimeSlot = (timeSlot: any) => {
     return (
-      prevBookings.filter((item: any) => item.selectedTime == time).length > 0
+      prevBookings.filter((item: any) => {
+        return isEqual(
+          new Date(item.time),
+          combineDateTime(date.toDateString(), timeSlot)
+        );
+      }).length > 0
     );
   };
 
@@ -132,6 +158,7 @@ function Page() {
     customizations: {
       title: "Consultation Appointment",
       description: "Payment for consultation",
+      logo: "https://i.imgur.com/teu2dXa.png",
       // logo: "https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg",
     },
   };
@@ -139,7 +166,8 @@ function Page() {
   const handleFlutterPayment = useFlutterwave(config as any);
 
   return (
-    <div className="p-8">
+    <>
+      {/* <div className="p-8">
       <div className="">
         <h2 className="font-bold text-3xl">
           {meeting?.name ? meeting?.name : "Meeting Name"}
@@ -233,7 +261,90 @@ function Page() {
           {isLoading ? <Spinner /> : "Schedule"}
         </Button>
       </div>
-    </div>
+    </div> */}
+      <div className="h-screen flex justify-center items-center bg-[#2E8ECD] bg-opacity-50 overflow-y-auto p-4">
+        <div className="md:w-4/12 rounded-md p-4 drop-shadow-xl bg-white m-4">
+          <Link href={"/"}>
+            <ArrowLeftIcon color="black" />
+          </Link>
+          <Image
+            src={"/logo-small.png"}
+            height={10}
+            width={50}
+            className="-ml-3"
+            alt="Odoctor Logo"
+          />
+          <h3 className="text-xl font-bold">
+            {meeting?.duration}mins Call with Dr {meeting?.user?.firstname}{" "}
+            {meeting?.user?.lastname}
+            {meeting?.user?.profilePicture?.url && (
+              <Image
+                src={meeting?.user?.profilePicture?.url ?? "/logo-small.png"}
+                height={5}
+                width={5}
+                alt="Doctor Picture"
+              />
+            )}
+          </h3>
+          <div className="mt-4">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={(d) => handleDateChange(d)}
+              className="w-full border-[1px] border-[#2E8ECD] rounded-md"
+              classNames={{
+                table: "w-full table-fixed",
+                head_row: "grid grid-cols-7",
+                row: "grid grid-cols-7",
+                cell: "aspect-square w-full text-center",
+                day: "p-1 flex items-center justify-center w-full h-full rounded-md focus:outline-none",
+                day_selected: "bg-black text-white",
+              }}
+              disabled={(date) => {
+                const today = startOfDay(new Date());
+                return isBefore(date, today);
+              }}
+            />
+          </div>
+          <div className="grid grid-cols-3 md:grid-cols-5 gap-2 mt-4">
+            {timeSlots?.map((time: any, index: any) => (
+              <Button
+                key={index}
+                disabled={checkTimeSlot(time)}
+                onClick={() => {
+                  console.log(time);
+                  setSelectedTime(time);
+                }}
+                className={`
+             ${time == selectedTime && "bg-black text-white"}
+             ${checkTimeSlot(time) && "bg-gray-700 cursor-not-allowed"}`}
+              >
+                {time}
+              </Button>
+            ))}
+          </div>
+          <Button
+            className="w-full bg-slate-800 text-white mt-4"
+            disabled={!selectedTime || !date || isLoading}
+            // onClick={handleBooking}
+            onClick={() => {
+              setIsLoading(true);
+
+              handleFlutterPayment({
+                callback: (response) => {
+                  handleBooking();
+                },
+                onClose: () => {
+                  setIsLoading(false);
+                },
+              });
+            }}
+          >
+            {isLoading ? <Spinner /> : "Schedule"}
+          </Button>
+        </div>
+      </div>
+    </>
   );
 }
 

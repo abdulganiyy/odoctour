@@ -14,7 +14,7 @@ import { FormControl, FormItem, FormLabel } from "@/components/ui/form";
 import { type FieldConfig } from "@/types";
 // import { getZipData } from '@/lib/utils';
 // import EmailInput from '../email-input';
-// import PhoneInput from '../phone-input';
+import PhoneInput from "../phone-input";
 // import InputWithIcon from '../input-with-icon';
 // import ButtonRadioGroup from '../button-radio-group';
 import DatePicker from "../date-picker";
@@ -99,16 +99,17 @@ export const FormField = ({
         />
       );
 
-    // case 'tel':
-    //   return (
-    //     <PhoneInput
-    //       className='max-h-9'
-    //       placeholder={field.placeholder}
-    //       disabled={isDisabled}
-    //       {...rhfField}
-    //       value={rhfField.value || ''}
-    //     />
-    //   );
+    case "tel":
+      return (
+        <PhoneInput
+          className="max-h-9"
+          placeholder={field.placeholder}
+          defaultCountry="NG"
+          disabled={isDisabled}
+          {...rhfField}
+          value={rhfField.value || ""}
+        />
+      );
 
     case "textarea":
       return (

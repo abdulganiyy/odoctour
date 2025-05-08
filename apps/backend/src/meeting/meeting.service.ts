@@ -32,15 +32,15 @@ export class MeetingService {
 
 
     }
-    return this.prismaService.meeting.findMany()
+    return this.prismaService.meeting.findMany();
   }
 
   findBookings (meetingId:string){
-     return this.prismaService.booking.findMany({where:{meetingId}})
+     return this.prismaService.booking.findMany({where:{meetingId}});
   }
 
   findOne(id: string) {
-    return this.prismaService.meeting.findUnique({where:{id}})
+    return this.prismaService.meeting.findUnique({include:{user:{include:{profilePicture:{select:{url:true}}}}},where:{id}});
   }
 
   update(id: number, updateMeetingDto: UpdateMeetingDto) {

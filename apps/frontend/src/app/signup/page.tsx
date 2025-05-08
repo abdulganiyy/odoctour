@@ -20,6 +20,12 @@ export const signUpFormFields: FieldConfig[] = [
     placeholder: "Enter your email",
   },
   {
+    name: "phone",
+    label: "Phone Number",
+    type: "tel",
+    placeholder: "Enter phone number",
+  },
+  {
     name: "firstname",
     label: "First Name",
     type: "text",

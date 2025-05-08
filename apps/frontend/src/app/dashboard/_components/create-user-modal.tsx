@@ -13,6 +13,7 @@ import FormFactory from "@/components/custom/form-factory";
 import type { FieldConfig, FormValues } from "@/types";
 import { createNewUserFormSchema } from "@/schema/user";
 import apiService from "@/lib/apiService";
+import { useToast } from "@/hooks/use-toast";
 
 export const createNewUserFormFields = (roles: any[]): FieldConfig[] => [
   {
@@ -20,6 +21,12 @@ export const createNewUserFormFields = (roles: any[]): FieldConfig[] => [
     label: "Email",
     type: "email",
     placeholder: "Enter your email",
+  },
+  {
+    name: "phone",
+    label: "Phone Number",
+    type: "tel",
+    placeholder: "Enter phone number",
   },
   {
     name: "firstname",
@@ -71,6 +78,8 @@ export function CreateUserModal() {
   const { GENERIC_ERROR } = createNewUserErrorMessages;
   const [roles, setRoles] = useState<any[]>([]);
 
+  const { toast } = useToast();
+
   useEffect(() => {
     const getRoles = async () => {
       try {
@@ -93,17 +102,18 @@ export function CreateUserModal() {
     const { confirmPassword, role, picture, ...payload } = data;
 
     try {
-      await apiService.post("/user/doctor", {
+      await apiService.post("/user", {
         ...payload,
         roleId: role,
         profilePictureId: picture.id,
       });
 
       setIsSubmitting(false);
-    } catch (error) {
-      console.log(error);
+      toast({ description: "New user has been successfully created" });
+    } catch (error: any) {
       setError(GENERIC_ERROR);
       setIsSubmitting(false);
+      toast({ variant: "destructive", description: error.message });
     }
   }
 

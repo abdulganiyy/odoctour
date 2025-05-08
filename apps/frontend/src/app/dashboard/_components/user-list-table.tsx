@@ -64,6 +64,7 @@ const UsersTable = () => {
                       <TableHead>First Name</TableHead>
                       <TableHead>Last Name</TableHead>
                       <TableHead>Email</TableHead>
+                      <TableHead>Phone Number</TableHead>
                       <TableHead>Role</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -90,6 +91,7 @@ const UsersTable = () => {
                           </TableCell>
                           <TableCell>{user.lastname}</TableCell>
                           <TableCell>{user.email}</TableCell>
+                          <TableCell>{user.phone || "-"}</TableCell>
                           <TableCell>{user.role.name}</TableCell>
                         </TableRow>
                       );

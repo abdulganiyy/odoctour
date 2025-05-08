@@ -10,13 +10,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import FormFactory from "@/components/custom/form-factory";
 
 import type { FieldConfig, FormValues } from "@/types";
 import { createNewMeetingFormSchema } from "@/schema/user";
 import apiService from "@/lib/apiService";
+import { useToast } from "@/hooks/use-toast";
 
 export const createNewMeetingFormFields: FieldConfig[] = [
   {
@@ -54,30 +54,31 @@ export const createNewMeetingFormFields: FieldConfig[] = [
 ];
 
 export const createNewMeetingErrorMessages = {
-  INVALID_CREDENTIALS: "Invalid credentials",
-  NO_MATCHING_ROLES:
-    "You do not have access to this portal. Contact your administrator for more information.",
-  GENERIC_ERROR: "There was an error signing up.",
+  GENERIC_ERROR: "There was an error creating your meeting.",
 } as const;
 const CreateMeeting = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { GENERIC_ERROR } = createNewMeetingErrorMessages;
 
+  const { toast } = useToast();
+
   async function handleSubmit(data: FormValues): Promise<void> {
     setError(null);
     setIsSubmitting(true);
 
-    console.log(data);
+    // console.log(data);
 
-    const { confirmPassword, ...payload } = data;
+    data;
 
     try {
-      const response = await apiService.post("/meeting", payload);
+      const response = await apiService.post("/meeting", data);
       setIsSubmitting(false);
+      toast({ description: "Your meeting calendar has been created" });
     } catch (error) {
       setError(GENERIC_ERROR);
       setIsSubmitting(false);
+      toast({ description: GENERIC_ERROR });
     }
   }
 

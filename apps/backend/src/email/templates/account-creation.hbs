@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Welcome to {{appName}}</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        padding: 30px;
+      }
+      .container {
+        background: #ffffff;
+        max-width: 600px;
+        margin: auto;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      }
+      h2 {
+        color: #2d3748;
+      }
+      p {
+        font-size: 16px;
+        color: #4a5568;
+      }
+      .highlight-box {
+        background: #f1f5f9;
+        padding: 12px 20px;
+        font-family: monospace;
+        font-size: 16px;
+        border-radius: 5px;
+        margin: 15px 0;
+        display: inline-block;
+        color: #2d3748;
+      }
+      .cta-button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 24px;
+        background-color: #007bff;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+      .footer {
+        margin-top: 30px;
+        font-size: 12px;
+        color: #a0aec0;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Welcome to {{appName}}, {{userName}}</h2>
+
+      <p>You’ve been added to <strong>{{appName}}</strong> as a <strong>{{userRole}}</strong>.</p>
+
+      <p>Here are your login details:</p>
+      <p><strong>Email:</strong> {{userEmail}}</p>
+      <p><strong>Temporary Password:</strong></p>
+      <div class="highlight-box">{{temporaryPassword}}</div>
+
+      <p>
+        Please log in using the button below and make sure to <strong>change your password</strong> immediately.
+      </p>
+
+      <a href="{{loginUrl}}" class="cta-button">Log In to Your Account</a>
+
+      <p>If you were not expecting this email, please contact us immediately.</p>
+
+      <div class="footer">Need help? Contact support@{{appDomain}}</div>
+    </div>
+  </body>
+</html>
