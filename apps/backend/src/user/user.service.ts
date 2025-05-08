@@ -42,7 +42,7 @@ export class UserService {
     const role = await this.prisma.role.findUniqueOrThrow({where:{id:data.roleId}})
 
     if(role.name == 'Doctor'){
-      await this.emailService.sendEmail(data.email,`Your MediConnect Doctor Account Has Been Created`,'account-creation',{
+      await this.emailService.sendEmail(data.email,`Your Odoctor Doctor Account Has Been Created`,'account-creation',{
       
         userName: `Dr. ${data.firstname} ${data.lastname}`,
         userEmail: data.email,
