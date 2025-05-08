@@ -64,7 +64,7 @@ const BookingsTable = () => {
 
           {/* Desktop View */}
           <div className="mt-2 w-full bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-            <div className="max-md:hidden mx-auto">
+            <div className="max-md:hid mx-auto">
               <div className="overflow-x-auto">
                 <Table className="w-full">
                   <TableHeader>
