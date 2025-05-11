@@ -27,7 +27,7 @@ export class AuthService {
     }
 
  
-    const payload = { userId: user.id, username: user.username,firstname: user.firstname,role:user.role.name };
+    const payload = { userId: user.id, username: user.username,email:user.email,firstname: user.firstname,role:user.role.name };
 
     return {
       access_token: await this.jwtService.signAsync(payload),
@@ -49,7 +49,7 @@ async signUp(email: string,firstname: string,lastname: string, pass: string): Pr
    const newUser = await this.usersService.create({email,password:passwordHash,lastname,firstname,roleId:userRole.id})
 
  
-    const payload = { userId: newUser.userId, username: newUser.username, firstname: newUser.firstname,role:userRole.name };
+    const payload = { userId: newUser.userId,email:newUser.email, username: newUser.username, firstname: newUser.firstname,role:userRole.name };
 
     await this.emailService.sendEmail(newUser.email,
       'Welcome to Our App!',

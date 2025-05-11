@@ -12,10 +12,14 @@ import { ConfigService } from '@nestjs/config';
 import { UuidService } from './uuid/uuid.service';
 import { EmailModule } from './email/email.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { BullModule } from '@nestjs/bull';
+
 
 
 @Module({
-  imports: [UserModule, AuthModule, RoleModule, MeetingModule, BookingModule, DocumentModule, EmailModule, DashboardModule],
+  imports: [UserModule, AuthModule, RoleModule, MeetingModule, BookingModule, DocumentModule, EmailModule, DashboardModule,
+    BullModule.forRoot({redis:{host:process.env.REDIS_HOST,port: 19295,username:process.env.REDIS_USERNAME ,
+      password: process.env.REDIS_PASSWORD,}})],
   controllers: [AppController],
   providers: [AppService, S3Service,ConfigService, UuidService],
 })

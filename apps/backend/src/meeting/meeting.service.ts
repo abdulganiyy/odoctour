@@ -4,6 +4,7 @@ import { UpdateMeetingDto } from './dto/update-meeting.dto';
 import { PrismaService } from 'src/prisma.service';
 import { BookingService } from 'src/booking/booking.service';
 
+
 @Injectable()
 export class MeetingService {
 
@@ -12,7 +13,7 @@ export class MeetingService {
   }
 
   create(createMeetingDto: CreateMeetingDto) {
-    return this.prismaService.meeting.create({data:createMeetingDto})
+    return this.prismaService.meeting.create({data:createMeetingDto});
   }
 
   findAll(user:any) {

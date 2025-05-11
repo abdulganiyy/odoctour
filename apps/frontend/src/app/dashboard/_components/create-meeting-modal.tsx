@@ -32,7 +32,7 @@ export const createNewMeetingFormFields: FieldConfig[] = [
     placeholder: "Select Meeting Duration",
     options: [
       { label: "30 mins", value: "30" },
-      { label: "45 mins", value: "45" },
+      // { label: "45 mins", value: "45" },
     ],
   },
   {

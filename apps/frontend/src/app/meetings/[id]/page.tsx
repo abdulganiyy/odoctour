@@ -33,7 +33,7 @@ function Page() {
   const { toast } = useToast();
 
   //  const [duration,setDuration] = useState(30)
-  const [description, setDescription] = useState("I have body pains");
+  const [description, setDescription] = useState("");
 
   const { user } = useUser();
 
@@ -151,8 +151,8 @@ function Page() {
     currency: "NGN",
     payment_options: "card",
     customer: {
-      email: user?.email ?? "user@gmail.com",
-      phone_number: user?.phone ?? "070********",
+      email: user?.email,
+      phone_number: user?.phone,
       name: user?.firstname,
     },
     customizations: {
@@ -262,7 +262,7 @@ function Page() {
         </Button>
       </div>
     </div> */}
-      <div className="h-screen flex justify-center items-center bg-[#2E8ECD] bg-opacity-50 overflow-y-auto p-4">
+      <div className="min-h-screen flex justify-center items-center bg-[#2E8ECD] bg-opacity-50 overflow-y-auto p-4">
         <div className="md:w-4/12 rounded-md p-4 drop-shadow-xl bg-white m-4">
           <Link href={"/"}>
             <ArrowLeftIcon color="black" />
@@ -322,6 +322,17 @@ function Page() {
                 {time}
               </Button>
             ))}
+          </div>
+          <div className="flex flex-col gap-y-4 mt-4">
+            <label className="text-[#2E8ECD]">
+              Add notes for the doctor...
+            </label>
+            <textarea
+              className="border rounded-md p-2 max-w-[450px]"
+              placeholder="Add some notes for the doctor"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
           </div>
           <Button
             className="w-full bg-slate-800 text-white mt-4"

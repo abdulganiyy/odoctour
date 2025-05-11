@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Upcoming Appointment Reminder</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        padding: 30px;
+      }
+      .container {
+        max-width: 600px;
+        background-color: #ffffff;
+        padding: 40px;
+        margin: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+      h2 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+      }
+      p {
+        font-size: 16px;
+        color: #555;
+      }
+      .info-box {
+        background-color: #f1f5f9;
+        padding: 16px;
+        border-radius: 6px;
+        margin-top: 20px;
+        font-size: 15px;
+      }
+      .cta-button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 24px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: bold;
+      }
+      .footer {
+        margin-top: 30px;
+        font-size: 12px;
+        text-align: center;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+     <h2>Hi {{recipientName}},</h2>
+
+      <p>This is a reminder that your appointment is scheduled to start in 30 minutes.</p>
+
+      <div class="info-box">
+        <p><strong>Date:</strong> {{appointmentDate}}</p>
+        <p><strong>Time:</strong> {{appointmentTime}}</p>
+        {{#if isDoctor}}
+          <p><strong>With Patient:</strong> {{withName}}</p>
+        {{else}}
+          <p><strong>With Doctor:</strong> Dr. {{withName}}</p>
+        {{/if}}
+        <p><strong>Location:</strong> {{appointmentLocation}}</p>
+      </div>
+
+      {{#if meetingLink}}
+        <a href="{{meetingLink}}" class="cta-button">Join Appointment</a>
+      {{/if}}
+
+      <p>Please make sure you're ready on time.</p>
+
+      <div class="footer">
+        If you have questions, contact us at support@{{appDomain}}.
+      </div>
+    </div>
+  </body>
+</html>

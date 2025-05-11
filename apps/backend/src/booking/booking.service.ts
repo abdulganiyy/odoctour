@@ -3,11 +3,15 @@ import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { PrismaService } from 'src/prisma.service';
 import { EmailService } from 'src/email/email.service';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
+import { format } from 'date-fns';
+
 
 @Injectable()
 export class BookingService {
 
-  constructor(private prismaService:PrismaService,private emailService:EmailService){}
+  constructor(private prismaService:PrismaService,private emailService:EmailService,@InjectQueue('meetingReminder') private meetingReminder:Queue){}
 
   async create(createBookingDto: CreateBookingDto) {
 
@@ -49,6 +53,40 @@ export class BookingService {
     location: meeting.url,
     appName: 'Odoctor'
 })
+
+const now = new Date();
+const reminderTime = new Date(newBooking.time.getTime() - 30 * 60 * 1000);
+const delay = reminderTime.getTime() - now.getTime();
+
+const dateOnly = format(newBooking.time, 'MMMM d, yyyy');
+const timeOnly = format(newBooking.time, 'hh:mm a');
+
+if (delay > 0) {
+  await this.meetingReminder.add('doctor-email-reminder',{
+    doctorEmail:meeting.user.email,
+    userName: user.firstname,
+    userEmail: user.email,
+    doctorName: meeting.user.firstname,
+    appointmentDate: dateOnly,
+    appointmentTime: timeOnly,
+    mode: meeting.type,
+    location: meeting.url,
+    appName: 'Odoctor'
+  },{delay})
+  
+  await this.meetingReminder.add('user-email-reminder',{
+    userEmail:user.email,
+    userName: user.firstname,
+    doctorName: meeting.user.firstname,
+    appointmentDate: dateOnly,
+    appointmentTime: timeOnly,
+    mode: meeting.type,
+    location: meeting.url,
+    appName: 'Odoctor',
+  },{delay})
+  
+}
+
 
 
   return newBooking
