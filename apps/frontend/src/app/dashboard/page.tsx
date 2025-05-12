@@ -44,7 +44,7 @@ const Dashboard = () => {
           <div className="h-30 bg-gray-200 rounded-md dark:bg-gray-700"></div>
         </div>
       ) : (
-        <div className="md:grid grid-cols-3 gap-4">
+        <div className="md:grid grid-cols-3 gap-4 space-y-4">
           {data.map((res) => {
             return (
               <div
