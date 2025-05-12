@@ -38,13 +38,13 @@ const Dashboard = () => {
         <h3 className="text-3xl">Hi, {user?.firstname} </h3>
       </div>
       {loading ? (
-        <div className="md:grid grid-cols-3 gap-4 animate-pulse">
+        <div className="md:grid md:grid-cols-3 gap-4 animate-pulse">
           <div className="h-30 bg-gray-200 rounded-md dark:bg-gray-700"></div>
           <div className="h-30 bg-gray-200 rounded-md dark:bg-gray-700"></div>
           <div className="h-30 bg-gray-200 rounded-md dark:bg-gray-700"></div>
         </div>
       ) : (
-        <div className="md:grid grid-cols-3 gap-4 space-y-4">
+        <div className="md:grid grid-cols-3 gap-4 space-y-4 md:space-y-0">
           {data.map((res) => {
             return (
               <div
