@@ -81,7 +81,7 @@ export default function Home() {
             toast({ description: "Login Successful" });
 
             if (triedConsultation && role == "User") {
-              router.push("/meetings/93e3430a-5aaa-4d5e-92e0-402acbe22d94");
+              router.push("/meetings");
             } else {
               router.push(`/dashboard`);
             }

@@ -264,7 +264,7 @@ function Page() {
     </div> */}
       <div className="min-h-screen flex justify-center items-center bg-[#2E8ECD] bg-opacity-50 overflow-y-auto p-4">
         <div className="md:w-4/12 rounded-md p-4 drop-shadow-xl bg-white m-4">
-          <Link href={"/"}>
+          <Link href={"/meetings"}>
             <ArrowLeftIcon color="black" />
           </Link>
           <Image
@@ -278,10 +278,11 @@ function Page() {
             {meeting?.duration}mins Call with Dr {meeting?.user?.firstname}{" "}
             {meeting?.user?.lastname}
             {meeting?.user?.profilePicture?.url && (
-              <Image
+              <img
                 src={meeting?.user?.profilePicture?.url ?? "/logo-small.png"}
-                height={5}
-                width={5}
+                // height={5}
+                // width={5}
+                className="h-20 w-20 rounded-full"
                 alt="Doctor Picture"
               />
             )}

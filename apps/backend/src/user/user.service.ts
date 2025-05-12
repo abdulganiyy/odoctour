@@ -23,6 +23,28 @@ export class UserService {
     })
   }
 
+  async findDoctorMeetings(){
+
+    const doctors = await this.prisma.user.findMany({
+      where:{role:{name:"Doctor"}},
+      include:{
+        role:true,
+        profilePicture:true
+      }
+    })
+
+  return   await Promise.all(doctors.map(async (doctor)=>{
+      
+      const meeting = await this.prisma.meeting.findFirst({where:{userId:doctor.id}})
+
+      return {
+        ...doctor,
+        meeting
+      }
+    }))
+
+  }
+
   async findOne(email: string): Promise<User | undefined> {
     return this.prisma.user.findUnique({where:{email},include:{role:true}})
   }
@@ -37,11 +59,22 @@ export class UserService {
 
     let passwordHash = await hash(data.password,10)
 
-    await this.prisma.user.create({data:{...data,password:passwordHash}})
+    const {link,...userPayload} = data;
+
+
+   const user = await this.prisma.user.create({data:{...userPayload,password:passwordHash}})
 
     const role = await this.prisma.role.findUniqueOrThrow({where:{id:data.roleId}})
 
+
     if(role.name == 'Doctor'){
+
+      await this.prisma.meeting.create({data:{name:"Consultation Appointment",
+        type:'Virtual',
+        url:link,
+        duration:30,
+        userId:user.id}})
+
       await this.emailService.sendEmail(data.email,`Your Odoctor Doctor Account Has Been Created`,'account-creation',{
       
         userName: `Dr. ${data.firstname} ${data.lastname}`,
@@ -56,7 +89,7 @@ export class UserService {
 
    
 
-    return {message:"New User created successfully"}
+    return {message:"New User created successfully"};
 
   }
 

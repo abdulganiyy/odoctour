@@ -15,12 +15,11 @@ export class UserController {
       return this.userService.createUser(data);
     }
 
-
-      // @HttpCode(HttpStatus.CREATED)
-      // @Post('doctor')
-      // createDoctor(@Body() data: CreateDoctor) {
-      //   return this.userService.createDoctor(data);
-      // }
+    @HttpCode(HttpStatus.OK)
+    @Get('doctors')
+    findDoctorsMeetings() {
+      return this.userService.findDoctorMeetings()
+    }
 
       @HttpCode(HttpStatus.OK)
       @Get()

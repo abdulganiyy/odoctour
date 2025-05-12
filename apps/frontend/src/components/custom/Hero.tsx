@@ -14,8 +14,8 @@ const Hero = () => {
       if (!user) {
         localStorage.setItem("triedConsultation", "true");
         router.push("/signin");
-      } else {
-        router.push("/meetings/93e3430a-5aaa-4d5e-92e0-402acbe22d94");
+      } else if (user && user.role == "User") {
+        router.push("/meetings");
       }
     }
   };

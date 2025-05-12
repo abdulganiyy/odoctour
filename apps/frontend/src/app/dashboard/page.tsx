@@ -60,11 +60,11 @@ const Dashboard = () => {
       )}
       <div className="flex items-center gap-2 mt-4">
         {user?.role == "Administrator" && <CreateUserModal />}
-        {user?.role == "Doctor" && <CreateMeeting />}
+        {/* {user?.role == "Doctor" && <CreateMeeting />} */}
         {user?.role == "User" && (
           <button
             onClick={() => {
-              router.push("/meetings/93e3430a-5aaa-4d5e-92e0-402acbe22d94");
+              router.push("/meetings");
             }}
             className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
           >

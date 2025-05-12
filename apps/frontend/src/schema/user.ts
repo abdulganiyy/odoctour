@@ -8,6 +8,7 @@ export const createNewUserFormSchema = yup.object().shape({
   phone:yup.string().required(),
   firstname: yup.string().required(),
   lastname: yup.string().required(),
+  link: yup.string().optional(),
   password: yup.string().required('Password is required'),
   confirmPassword: yup
     .string()

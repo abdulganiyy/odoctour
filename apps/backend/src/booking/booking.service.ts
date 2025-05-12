@@ -18,11 +18,16 @@ export class BookingService {
    const newBooking = await this.prismaService.booking.create({data:createBookingDto})
 
    const user = await this.prismaService.user.findUniqueOrThrow({
+    include:{
+      role:true
+    },
     
     where:{
       id:createBookingDto.userId
     }
    })
+
+   if(user.role.name !== 'User') throw new Error('User not authorised to perform this operation')
 
    const meeting = await this.prismaService.meeting.findUniqueOrThrow({
     select:{
@@ -102,7 +107,7 @@ if (delay > 0) {
         },
         where:{
           user:{
-            id:user.id
+            id:user.userId
           },
         }
       })

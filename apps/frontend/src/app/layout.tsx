@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Suspense } from "react";
+import QueryClientWrapper from "./_components/query_client";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,10 +30,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Suspense>
-          {children}
-          <Toaster />
-        </Suspense>
+        <QueryClientWrapper>
+          <Suspense>
+            {children}
+            <Toaster />
+          </Suspense>
+        </QueryClientWrapper>
       </body>
     </html>
   );

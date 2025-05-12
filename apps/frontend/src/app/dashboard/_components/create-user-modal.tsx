@@ -14,6 +14,7 @@ import type { FieldConfig, FormValues } from "@/types";
 import { createNewUserFormSchema } from "@/schema/user";
 import apiService from "@/lib/apiService";
 import { useToast } from "@/hooks/use-toast";
+import { values } from "lodash";
 
 export const createNewUserFormFields = (roles: any[]): FieldConfig[] => [
   {
@@ -57,6 +58,14 @@ export const createNewUserFormFields = (roles: any[]): FieldConfig[] => [
     type: "select",
     label: "Role",
     options: roles.map((role) => ({ label: role.name, value: role.id })),
+  },
+  {
+    label: "Doctor Meeting Link",
+    name: "link",
+    type: "text",
+    placeholder: "Enter google-meet link",
+    hidden: (values?: FormValues) =>
+      values?.role != "3c7a2642-8a58-40bd-aac2-fa48321f5664",
   },
   {
     name: "picture",

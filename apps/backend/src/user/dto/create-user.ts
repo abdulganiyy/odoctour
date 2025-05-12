@@ -3,6 +3,7 @@ export class CreateUser{
     lastname:string
     email:string
     phone?:string
+    link?:string
     password:string
     roleId:string
     profilePictureId?:string
