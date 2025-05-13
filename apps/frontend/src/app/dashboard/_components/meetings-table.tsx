@@ -10,11 +10,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import TablePaginationFooter from "./table-pagination-footer";
+import { useQuery } from "@tanstack/react-query";
 
 const MeetingsTable = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const fetchBookings = async () => {
+    return await apiService.get(`/meeting`);
+  };
 
-  const [data, setData] = useState<any[]>([]);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["users-meetings"],
+    queryFn: fetchBookings,
+  });
+
   const router = useRouter();
   const pathname = usePathname();
   const meetingsList = data;
@@ -32,19 +39,6 @@ const MeetingsTable = () => {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
-
-  useEffect(() => {
-    const fetchMeetings = async () => {
-      try {
-        const response = await apiService.get(`/meeting`);
-        setData(response);
-      } catch (error: any) {
-        console.log(error.message);
-      }
-    };
-
-    fetchMeetings();
-  }, []);
 
   return (
     <>
@@ -70,7 +64,7 @@ const MeetingsTable = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {currentItems.map((meeting) => {
+                    {currentItems.map((meeting: any) => {
                       return (
                         <TableRow key={meeting.id}>
                           <TableCell className="font-medium">

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import TablePaginationFooter from "./table-pagination-footer";
 import { addMinutes, format } from "date-fns";
+import { useQuery } from "@tanstack/react-query";
 
 const generateSlot = (startTime: string, durationInMinutes: number) => {
   const formattedDate = format(startTime, "MMMM d, yyyy"); // "January 2"
@@ -20,9 +21,15 @@ const generateSlot = (startTime: string, durationInMinutes: number) => {
 };
 
 const BookingsTable = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const fetchBookings = async () => {
+    return await apiService.get(`/booking`);
+  };
 
-  const [data, setData] = useState<any[]>([]);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["bookings"],
+    queryFn: fetchBookings,
+  });
+
   const router = useRouter();
   const pathname = usePathname();
   const bookingsList = data;
@@ -40,19 +47,6 @@ const BookingsTable = () => {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
-
-  useEffect(() => {
-    const fetchBookings = async () => {
-      try {
-        const response = await apiService.get(`/booking`);
-        setData(response);
-      } catch (error: any) {
-        console.log(error.message);
-      }
-    };
-
-    fetchBookings();
-  }, []);
 
   return (
     <>
@@ -84,7 +78,7 @@ const BookingsTable = () => {
                         (a: any, b: any) =>
                           +new Date(b.date) - +new Date(a.date)
                       )
-                      .map((booking) => {
+                      .map((booking: any) => {
                         return (
                           <TableRow key={booking.id}>
                             <TableCell className="font-medium">

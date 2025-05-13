@@ -8,44 +8,79 @@ import MeetingsTable from "./_components/meetings-table";
 import BookingsTable from "./_components/bookings-table";
 import apiService from "@/lib/apiService";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+
+type DashboardData = {
+  name: string;
+  data: number;
+};
 
 const Dashboard = () => {
   const { user } = useUser();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<any[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchDashboardSummary = async () => {
-      setLoading(true);
-      try {
-        const response = await apiService.get(`/dashboard`);
-        console.log(response);
-        setData(response);
-      } catch (error: any) {
-        console.log(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchDashboardSummary = async () => {
+    const response = await apiService.get(`/dashboard`);
+    console.log(response);
+    return response;
+  };
 
-    fetchDashboardSummary();
-  }, []);
+  const {
+    data,
+    isLoading: loading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["dashboard"],
+    queryFn: fetchDashboardSummary,
+  });
+
   return (
     <div>
       <div className="mb-4">
         <h3 className="text-3xl">Hi, {user?.firstname} </h3>
       </div>
-      {loading ? (
+      {loading && (
         <div className="md:grid md:grid-cols-3 gap-4 animate-pulse">
           <div className="h-30 bg-gray-200 rounded-md dark:bg-gray-700"></div>
           <div className="h-30 bg-gray-200 rounded-md dark:bg-gray-700"></div>
           <div className="h-30 bg-gray-200 rounded-md dark:bg-gray-700"></div>
         </div>
-      ) : (
+      )}
+      {/* {error && (
+        <div
+          className="flex items-center justify-between gap-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-md max-w-md"
+          role="alert"
+        >
+          <span className="flex-1 text-sm">
+            ⚠️ Failed to load data. Please check your connection.
+          </span>
+
+          <button
+            type="button"
+            onClick={() => refetch()}
+            className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 rounded-md transition"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 4v5h.582M20 20v-5h-.581m0 0A8.001 8.001 0 004.582 9M4 15a8.001 8.001 0 0015.837 1"
+              />
+            </svg>
+            Retry
+          </button>
+        </div>
+      )} */}
+      {!error ? (
         <div className="md:grid grid-cols-3 gap-4 space-y-4 md:space-y-0">
-          {data.map((res) => {
+          {data?.map((res: DashboardData) => {
             return (
               <div
                 key={res.name}
@@ -56,6 +91,36 @@ const Dashboard = () => {
               </div>
             );
           })}
+        </div>
+      ) : (
+        <div
+          className="flex items-center justify-between gap-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-md"
+          role="alert"
+        >
+          <span className="flex-1 text-sm">
+            ⚠️ Failed to load data. Please check your connection.
+          </span>
+
+          <button
+            type="button"
+            onClick={() => refetch()}
+            className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 rounded-md transition"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 4v5h.582M20 20v-5h-.581m0 0A8.001 8.001 0 004.582 9M4 15a8.001 8.001 0 0015.837 1"
+              />
+            </svg>
+            Retry
+          </button>
         </div>
       )}
       <div className="flex items-center gap-2 mt-4">

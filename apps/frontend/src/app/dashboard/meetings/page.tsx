@@ -4,25 +4,29 @@ import apiService from "@/lib/apiService";
 import Spinner from "@/components/spinner";
 import Link from "next/link";
 // import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
 
 const Page = () => {
-  const [meetings, setMeetings] = useState([]);
+  const fetchMeeting = async () => {
+    return await apiService.get(`/meeting`);
+  };
 
-  useEffect(() => {
-    const fetchMeeting = async () => {
-      try {
-        const response = await apiService.get(`/meeting`);
+  const {
+    data: meetings,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["meetings"],
+    queryFn: fetchMeeting,
+  });
 
-        console.log(response);
-
-        setMeetings(response);
-      } catch (error: any) {
-        console.log(error.message);
-      }
-    };
-
-    fetchMeeting();
-  }, []);
+  if (isLoading)
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <Spinner />
+      </div>
+    );
+  if (error) return <div>Error: {(error as Error).message}</div>;
 
   return (
     <div className="grid grid-cols-4 gap-4">
