@@ -34,6 +34,7 @@ const apiService = {
   get: (url: string) => request("GET", url),
   post: (url: string, data: any) => request("POST", url, data),
   put: (url: string, data: any) => request("PUT", url, data),
+  patch: (url: string, data: any) => request("PATCH", url, data),
   delete: (url: string) => request("DELETE", url),
 };
 

@@ -17,32 +17,28 @@ export class DashboardService {
 
   async findAll(user:any) {
     let role = user.role;
+    let userId = user.userId
 
-    const appointments = await this.prismaService.booking.findMany({
-      include:{
-        meeting:true
-      },
-      where:{
-        user:{
-          id:user.id
-        },
-      }
-    })
+    const appointments = await this.prismaService.booking.findMany()
 
-    const meetings = await this.prismaService.meeting.findMany({
-    
-      where:{
-        user:{
-          id:user.id
-        },
-      }
-    })
+    const meetings = await this.prismaService.meeting.findMany()
 
     const users = await this.prismaService.user.findMany()
 
-    // console.log(appointments,meetings)
+    // console.log(appointments,meetings);
 
     if(role == 'User'){
+
+      const appointments = await this.prismaService.booking.findMany({
+        include:{
+          meeting:true
+        },
+        where:{
+          user:{
+            id:user.userId
+          },
+        }
+      })
 
       return [
         {
@@ -53,6 +49,24 @@ export class DashboardService {
       
 
     }else if(role == 'Doctor'){
+
+      const meetings = await this.prismaService.meeting.findMany({
+        include:{user:true},
+          where:{
+            user:{
+              id:user.userId
+            },
+          }
+        })
+
+        const appointments = await this.prismaService.booking.findMany({
+  
+          where:{
+            meeting:{
+              userId
+            }
+          }
+        })
 
       return [
         {

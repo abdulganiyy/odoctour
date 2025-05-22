@@ -1,12 +1,21 @@
-import * as React from 'react';
-import { useForm, type SubmitHandler, type FieldValues, type UseFormReturn } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Form } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
-import { type FieldConfig, type FormValues, type FormActionButtonsConfig } from '@/types';
-import FormFieldWrapper from './form-field-wrapper';
+import * as React from "react";
+import {
+  useForm,
+  type SubmitHandler,
+  type FieldValues,
+  type UseFormReturn,
+} from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Form } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import {
+  type FieldConfig,
+  type FormValues,
+  type FormActionButtonsConfig,
+} from "@/types";
+import FormFieldWrapper from "./form-field-wrapper";
 // import { Turnstile } from '@marsidev/react-turnstile';
-import type { AnyObject, ObjectSchema } from 'yup';
+import type { AnyObject, ObjectSchema } from "yup";
 
 interface FormFactoryProps {
   fields: FieldConfig[];
@@ -18,7 +27,7 @@ interface FormFactoryProps {
   actionButtonsConfig?: FormActionButtonsConfig;
   actionButtonsComponent?: React.ReactNode;
   submitDisabled?: boolean;
-//   cloudflareTurnstileCallback?: (token: string) => void;
+  //   cloudflareTurnstileCallback?: (token: string) => void;
   formWrapperClassName?: string;
   formFieldElClass?: string;
   readOnly?: boolean;
@@ -37,7 +46,7 @@ const FormFactory: React.FC<FormFactoryProps> = ({
   actionButtonsConfig, // Configure button text, back vs cancel, etc.
   actionButtonsComponent, // allows passing action buttons wrapped in specialized helper components, such as shadcn/ui dialog triggers
   submitDisabled, // disable submit button based on condition in parent
-//   cloudflareTurnstileCallback, // callback to handle Cloudflare Turnstile token
+  //   cloudflareTurnstileCallback, // callback to handle Cloudflare Turnstile token
   formWrapperClassName,
   formFieldElClass,
   readOnly = false,
@@ -61,7 +70,7 @@ const FormFactory: React.FC<FormFactoryProps> = ({
           e.preventDefault();
           void form.handleSubmit(onSubmit)(e);
         }}
-        className='space-y-8'
+        className="space-y-8"
       >
         {fields.map((field) => (
           <React.Fragment key={field.name}>
@@ -74,8 +83,13 @@ const FormFactory: React.FC<FormFactoryProps> = ({
               labelWrapperClassName={labelWrapperClassName}
               formFieldSubFieldsWrapperClass={formFieldSubFieldsWrapperClass}
             />
-            {field.bottomContentHidden && field.bottomContentHidden(form.getValues()) ? null : field.bottomContent}
-            {field.bottomDivider ? <div className='border-b border-gray-200' /> : null}
+            {field.bottomContentHidden &&
+            field.bottomContentHidden(form.getValues())
+              ? null
+              : field.bottomContent}
+            {field.bottomDivider ? (
+              <div className="border-b border-gray-200" />
+            ) : null}
           </React.Fragment>
         ))}
         {/* {cloudflareTurnstileCallback ? (
@@ -91,29 +105,31 @@ const FormFactory: React.FC<FormFactoryProps> = ({
         ) : (
           <>
             {actionButtonsConfig ? (
-              <div className={`flex ${onCancel || onBack ? 'justify-between' : 'justify-end'}`}>
+              <div
+                className={`flex ${onCancel || onBack ? "justify-between" : "justify-end"}`}
+              >
                 {onCancel ? (
-                  <Button type='button' onClick={onCancel} variant='secondary'>
-                    {actionButtonsConfig.cancelLabel ?? 'Cancel'}
+                  <Button type="button" onClick={onCancel} variant="secondary">
+                    {actionButtonsConfig.cancelLabel ?? "Cancel"}
                   </Button>
                 ) : null}
                 {onBack ? (
                   <Button
-                    type='button'
+                    type="button"
                     onClick={() => {
                       onBack(form.getValues());
                     }}
-                    variant='secondary'
+                    variant="secondary"
                   >
-                    {actionButtonsConfig.backLabel ?? 'Back'}
+                    {actionButtonsConfig.backLabel ?? "Back"}
                   </Button>
                 ) : null}
-                <Button type='submit' disabled={submitDisabled}>
+                <Button type="submit" disabled={submitDisabled}>
                   {actionButtonsConfig.continueLabel}
                 </Button>
               </div>
             ) : (
-              <Button type='submit' disabled={submitDisabled}>
+              <Button type="submit" disabled={submitDisabled}>
                 Submit
               </Button>
             )}

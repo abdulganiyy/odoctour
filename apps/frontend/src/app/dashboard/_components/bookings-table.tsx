@@ -51,7 +51,7 @@ const BookingsTable = () => {
   return (
     <>
       {isLoading ? (
-        <p className="text-center py-4">Loading meetings...</p>
+        <p className="text-center py-4">Loading appointments...</p>
       ) : (
         <>
           {/* Mobile View */}

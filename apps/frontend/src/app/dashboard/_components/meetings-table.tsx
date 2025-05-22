@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import TablePaginationFooter from "./table-pagination-footer";
 import { useQuery } from "@tanstack/react-query";
+import EditMeeting from "./edit-meeting-modal";
 
 const MeetingsTable = () => {
   const fetchBookings = async () => {
@@ -61,6 +62,7 @@ const MeetingsTable = () => {
                       <TableHead className="md:col-span-1 text-center">
                         Duration
                       </TableHead>
+                      <TableHead className="md:col-span-2">Edit</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -74,6 +76,9 @@ const MeetingsTable = () => {
                           <TableCell>{meeting.url}</TableCell>
                           <TableCell className="text-center">
                             {meeting.duration}mins
+                          </TableCell>
+                          <TableCell>
+                            <EditMeeting data={{ ...meeting }} />
                           </TableCell>
                         </TableRow>
                       );

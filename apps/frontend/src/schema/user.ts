@@ -23,6 +23,20 @@ export const createNewUserFormSchema = yup.object().shape({
 }
 );
 
+export const EditMeetingFormSchema = yup.object().shape({
+  name: yup.string().required(),
+  duration: yup.string().required(),
+  type: yup.string().required(),
+  url: yup.string().required(),
+  availability:yup.array().of(yup.object().shape({  
+    dayOfWeek: yup.string().required(),
+    canBook: yup.boolean().optional(),
+    allDay: yup.boolean().optional(),
+    startTime: yup.string().required(),
+    endTime: yup.string().required(),}).required('Invalid time format'))
+}
+);
+
 
 export const createNewMeetingFormSchema = yup.object().shape({
     name: yup.string().required(),

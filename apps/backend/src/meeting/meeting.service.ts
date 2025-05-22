@@ -41,11 +41,73 @@ export class MeetingService {
   }
 
   findOne(id: string) {
-    return this.prismaService.meeting.findUnique({include:{user:{include:{profilePicture:{select:{url:true}}}}},where:{id}});
+    return this.prismaService.meeting.findUnique({include:{user:{include:{profilePicture:{select:{url:true}}}},availabilitySlots:true},where:{id}});
   }
 
-  update(id: number, updateMeetingDto: UpdateMeetingDto) {
-    return `This action updates a #${id} meeting`;
+  async update(id: string, updateMeetingDto: UpdateMeetingDto) {
+
+    const {availability,...payload} = updateMeetingDto
+
+    // await this.prismaService.availability.updateMany({where:{meetingId:id},data:availability})
+    // await this.prismaService.$transaction(
+    //   availability.map((item:any) =>
+    //     this.prismaService.availability.upsert({
+    //       where: {
+    //         dayOfWeek:item.dayOfWeek,
+    //         // id:'',
+    //         meetingId:id
+    //       },
+    //       update: {
+    //         canBook: item.canBook,
+    //         startTime: item.startTime,
+    //         endTime: item.endTime,
+    //       },
+    //       create: {
+    //         meetingId: id,
+    //         dayOfWeek: item.dayOfWeek,
+    //         canBook: item.canBook,
+    //         startTime: item.startTime,
+    //         endTime: item.endTime,
+    //       },
+    //     })
+    //   )
+    // );
+
+    for (const item  of availability) {
+      const existing = await this.prismaService.availability.findFirst({
+        where: {
+          meetingId:id,
+          dayOfWeek: (item as any).dayOfWeek,
+        },
+      });
+    
+      if (!existing) {
+        await this.prismaService.availability.create({
+          data: {
+            meetingId:id,
+            dayOfWeek: (item as any).dayOfWeek,
+            canBook: (item as any).canBook,
+            startTime: (item as any).startTime,
+            endTime: (item as any).endTime,
+          },
+        });
+      }else{
+        await this.prismaService.availability.update({where:{id:existing.id},
+          data: {
+            meetingId:id,
+            dayOfWeek: (item as any).dayOfWeek,
+            canBook: (item as any).canBook,
+            startTime: (item as any).startTime,
+            endTime: (item as any).endTime,
+          },
+        });
+      }
+    }
+    
+
+    return this.prismaService.meeting.update({where:{id},data:payload})
+
+
   }
 
   remove(id: number) {

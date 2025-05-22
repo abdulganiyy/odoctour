@@ -45,11 +45,32 @@ function Page() {
 
   useEffect(() => {
     meeting?.duration && createTimeSlot(meeting?.duration);
-  }, [meeting?.duration]);
+  }, [meeting?.duration, date]);
 
   const createTimeSlot = (interval: any) => {
-    const startTime = 8 * 60; // 8 AM in minutes
-    const endTime = 22 * 60; // 10 PM in minutes
+    const dayNames: string[] = [
+      "SUNDAY",
+      "MONDAY",
+      "TUESDAY",
+      "WEDNESDAY",
+      "THURSDAY",
+      "FRIDAY",
+      "SATURDAY",
+    ];
+
+    const dateParsed = new Date(date);
+    const dayOfWeek = dayNames[dateParsed.getDay()];
+    let slot = meeting.availabilitySlots.find(
+      (slot: any) => slot.dayOfWeek == dayOfWeek
+    );
+    // const startTime = 8 * 60; // 8 AM in minutes
+    // const endTime = 22 * 60; // 10 PM in minutes
+
+    const [eh, em] = slot.endTime?.split(":").map(Number) ?? [];
+    const [sh, sm] = slot.startTime.split(":").map(Number);
+
+    const startTime = sh * 60 + sm;
+    const endTime = eh * 60 + em;
     const totalSlots = (endTime - startTime) / interval;
     const slots = Array.from({ length: totalSlots }, (_, i) => {
       const totalMinutes = startTime + i * interval;
@@ -64,6 +85,24 @@ function Page() {
 
     setTimeSlots(slots);
   };
+
+  // const createTimeSlot = (interval: any) => {
+  //   const startTime = 8 * 60; // 8 AM in minutes
+  //   const endTime = 22 * 60; // 10 PM in minutes
+  //   const totalSlots = (endTime - startTime) / interval;
+  //   const slots = Array.from({ length: totalSlots }, (_, i) => {
+  //     const totalMinutes = startTime + i * interval;
+  //     const hours = Math.floor(totalMinutes / 60);
+  //     const minutes = totalMinutes % 60;
+  //     const formattedHours = hours > 12 ? hours - 12 : hours; // Convert to 12-hour format
+  //     const period = hours >= 12 ? "PM" : "AM";
+  //     return `${String(formattedHours).padStart(2, "0")}:${String(
+  //       minutes
+  //     ).padStart(2, "0")} ${period}`;
+  //   });
+
+  //   setTimeSlots(slots);
+  // };
 
   const handleDateChange = (date: any) => {
     setDate(date);
@@ -102,6 +141,8 @@ function Page() {
     const fetchMeeting = async () => {
       try {
         const response = await apiService.get(`/meeting/${id}`);
+
+        console.log(response);
 
         setMeeting(response);
       } catch (error: any) {

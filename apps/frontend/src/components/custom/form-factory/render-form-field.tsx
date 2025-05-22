@@ -24,6 +24,7 @@ import DatePicker from "../date-picker";
 import FileDropzone from "../file-dropzone";
 import { debounce } from "lodash";
 import PictureUpload from "../picture-upload";
+import TimeSlotsInput from "../timeslots-input";
 
 interface RenderFormFieldProps {
   field: FieldConfig;
@@ -282,6 +283,9 @@ export const FormField = ({
           maxSize={field.fileUploadOptions?.maxSize || 1024 * 1024 * 1}
         />
       );
+
+    case "availability":
+      return <TimeSlotsInput name={field.name} />;
 
     // case 'zip':
     //   return (
